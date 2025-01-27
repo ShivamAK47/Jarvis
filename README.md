@@ -9,6 +9,7 @@ JARVIS (Just A Rather Very Intelligent System) is an intelligent virtual assista
 <br>
 Key Features
 <br>
+
 1. Voice and Text Interaction
 <br>
  -Real-time voice recognition and response.
