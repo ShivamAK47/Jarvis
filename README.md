@@ -15,31 +15,31 @@ Key Features
 <br>
  -Option to type commands for accessibility in noisy environments.
 <br>
-3. Task Automation
+2. Task Automation
 <br> 
  -Set reminders, alarms, and events.
 <br>
  -Manage to-do lists and track daily schedules.
 <br>
-5. Information Assistance
+3. Information Assistance
 <br>
  -Retrieve weather updates, news, and general knowledge.
 <br>
  -Provide real-time answers to questions using search APIs.
 <br>
-6. Smart Home Integration (Optional)
+4. Smart Home Integration (Optional)
 <br>
  -Control IoT devices like lights, fans, and thermostats.
 <br>
  -Compatibility with smart home hubs via APIs (e.g., Alexa, Google Home).
 <br>
-7. Entertainment
+5. Entertainment
 <br>
  -Play music and videos from online platforms.
 <br>
  -Tell jokes, share fun facts, and engage in casual conversation.
 <br>
-8. Custom Responses and Personalization
+6. Custom Responses and Personalization
 <br>
  -Recognizes individual user preferences for tailored interactions.
 <br>
