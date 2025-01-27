@@ -1,0 +1,188 @@
+import pyttsx3
+import speech_recognition as sr
+import random
+import webbrowser
+import datetime
+from plyer import notification
+import pyautogui
+import wikipedia
+import pywhatkit as pwk
+import sys
+from googlesearch import search
+import time
+import openai_request as ai
+
+# Initialize pyttsx3
+engine = pyttsx3.init()
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[0].id)
+engine.setProperty("rate", 150)
+
+def speak(audio):
+    engine.say(audio)
+    engine.runAndWait()
+
+def command():
+    content = " "
+    while content == " ":
+        r = sr.Recognizer()
+        with sr.Microphone() as source:
+            print("Say something!")
+            audio = r.listen(source)
+
+        try:
+            content = r.recognize_google(audio, language='en-in')
+            print("You said: " + content)
+        except Exception as e:
+            print("Please try again...")
+
+    return content
+
+# Function to open the browser and search in ChatGPT
+def open_browser_and_search(query):
+    # Open browser using "Windows + R"
+    pyautogui.hotkey('win', 'r')
+    time.sleep(1)
+    pyautogui.write('chrome')  # Change this if you're using a different browser
+    pyautogui.press('enter')
+    time.sleep(2)
+
+    # Navigate to ChatGPT
+    pyautogui.write('https://chat.openai.com')
+    pyautogui.press('enter')
+    time.sleep(3)
+
+    # Simulate typing the query in the ChatGPT input box
+    pyautogui.write(query)
+    pyautogui.press('enter')
+    time.sleep(5)  # Wait for a response
+
+    # Extract the response (you can improve this by reading from the browser with pyautogui)
+    speak("I have found an answer for your question. Here's what I got:")
+    speak("This is the extracted answer.")  # Placeholder for actual answer extraction
+
+
+
+# Wish the user based on the time of day
+def wish():
+    hour = int(datetime.datetime.now().hour)
+
+    if hour >= 0 and hour < 12:
+        speak("Good morning")
+    elif hour >= 12 and hour < 17:
+        speak("Good afternoon")
+    else:
+        speak("Good evening")
+
+    speak("I am Jarvis, sir. Please tell me how I can assist you.")
+
+if __name__ == "__main__":
+    wish()
+
+def main_process():
+    while True:
+        request = command().lower()
+
+        if "hello jarvis" in request:
+            speak("Welcome sir, how can I assist you?")
+        elif "jarvis play music" in request:
+            speak("Playing music")
+            song = random.randint(1, 4)
+            if song == 1:
+                webbrowser.open("https://youtu.be/50VNCymT-Cs?si=6VME_t9mS0k5zRxR")
+            elif song == 2:
+                webbrowser.open("https://youtu.be/JGwWNGJdvx8?si=E_da6z9nH1RbT_TV")
+            elif song == 3:
+                webbrowser.open("https://youtu.be/kJQP7kiw5Fk?si=hS3_Nztzbx7dTBQ5")
+            elif song == 4:
+                webbrowser.open("https://youtu.be/XO8wew38VM8?si=UijMQF8YKkO5973x")
+        elif "show time" in request:
+            now_time = datetime.datetime.now().strftime("%H:%M")
+            speak("Current time is " + str(now_time))
+
+        elif "show date" in request:
+            now_date = datetime.datetime.now().strftime("%d:%m:%Y")
+            speak("Current date is " + str(now_date))
+
+        elif "new task" in request:
+            task = request.replace("new task", "")
+            task = task.strip()
+            if task != "":
+                speak("Adding task: " + task)
+                with open("todo.txt", "a") as file:
+                    file.write(task + "\n")
+
+        elif "speak task" in request:
+            with open("todo.txt", "r") as file:
+                speak("The tasks for today are: " + file.read())
+
+        elif "show work" in request:
+            with open("todo.txt", "r") as file:
+                tasks = file.read()
+            notification.notify(
+                title="Today's Work",
+                message=tasks
+            )
+
+        elif "open facebook" in request:
+            webbrowser.open("https://www.facebook.com")
+            speak("Facebook is open")
+
+        elif "open instagram" in request:
+            webbrowser.open("https://www.instagram.com")
+            speak("Instagram is open")
+
+        elif "jarvis open" in request:
+            query = request.replace("jarvis open", "").strip()
+            pyautogui.press("super")
+            pyautogui.typewrite(query)
+            pyautogui.sleep(2)
+            pyautogui.press("enter")
+
+        elif "wikipedia" in request:
+            request = request.replace("jarvis", "")
+            request = request.replace("search wikipedia", "")
+            result = wikipedia.summary(request, sentences=2)
+            print(result)
+            speak(result)
+
+        
+
+        elif "send whatsapp" in request:
+            pwk.sendwhatmsg("+910123456789", "Hi, what's up", 7, 40, 30)
+            speak("Message sent successfully")
+        
+        elif "ask ai" in request:
+            request = request.replace("jarvis", "")
+            request = request.replace("ask ai", "")
+
+            print(request)
+            response = ai.send_request(request)
+            print(response)
+            speak(response)
+     
+        elif "what is my name" in request:
+            request = request.replace("jarvis", "")
+            request = request.replace("what is my name", "")
+
+            print(request)
+            response = ("My name is shivam saroj")
+            print(response)
+            speak(response)
+
+        elif "jarvis" in request:
+            query = request.replace("jarvis", "")
+            query = request.replace("search google", "")
+            speak(f"Searching for {query}")
+            open_browser_and_search(query)    
+    
+
+
+        elif "no thanks" in request:
+            speak("Thanks for using me sir, have a good day!")
+            sys.exit()
+
+        speak("Do you need any other assistance?")
+
+# Start the assistant
+main_process()
